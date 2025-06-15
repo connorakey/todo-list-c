@@ -23,7 +23,8 @@ int main() {
     int choice = 0;
     if (scanf("%d", &choice) != 1) {
       printf("\nInvalid input. Please enter a number between 1 and 4.\n");
-      while (getchar() != '\n'); // Clear the input buffer
+      while (getchar() != '\n')
+        ; // Clear the input buffer
       continue;
     }
     getchar();
@@ -46,7 +47,8 @@ int main() {
       if (scanf("%d", &bufferPriority) != 1) {
         printf("\nInvalid input. Please enter a number between 1 and 1000.\n");
         free(tasks[taskCount].description);
-        while (getchar() != '\n'); // Clear the input buffer
+        while (getchar() != '\n')
+          ; // Clear the input buffer
         break;
       }
       if (bufferPriority < 1 || bufferPriority > 1000) {
@@ -69,13 +71,14 @@ int main() {
       break;
     case 3:
       int taskNumber = 0;
-      printf("\nEnter the task number to remove: \n");
       for (int i = 0; i < taskCount; i++) {
         printf("Task %d: %s", i + 1, tasks[i].description);
       }
+      printf("\nEnter the task number to remove: ");
       if (scanf("%d", &taskNumber) != 1) {
         printf("\nInvalid input. Please enter a valid task number.\n");
-        while (getchar() != '\n');
+        while (getchar() != '\n')
+          ;
         break;
       }
       if (taskNumber < 1 || taskNumber > taskCount) {
