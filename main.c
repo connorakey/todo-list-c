@@ -23,14 +23,17 @@ int main() {
     int choice = 0;
     if (scanf("%d", &choice) != 1) {
       printf("\nInvalid input. Please enter a number between 1 and 4.\n");
-      while (getchar() != '\n')
-        ; // Clear the input buffer
+      while (getchar() != '\n');
       continue;
     }
     getchar();
 
     switch (choice) {
     case 1:
+      if (taskCount > 1000) {
+        printf("You have reached the maximum amount of accepted tasks, if you want more please edit the variable tasks within the source code");
+        break;
+      }
       printf("\nDescription of the task: ");
       if (fgets(buffer, sizeof(buffer), stdin) == NULL) {
         printf("\nError reading input.\n");
@@ -47,13 +50,11 @@ int main() {
       if (scanf("%d", &bufferPriority) != 1) {
         printf("\nInvalid input. Please enter a number between 1 and 1000.\n");
         free(tasks[taskCount].description);
-        while (getchar() != '\n')
-          ; // Clear the input buffer
+        while (getchar() != '\n');
         break;
       }
       if (bufferPriority < 1 || bufferPriority > 1000) {
-        printf(
-            "\nInvalid priority. Please enter a number between 1 and 1000.\n");
+        printf("\nInvalid priority. Please enter a number between 1 and 1000.\n");
         free(tasks[taskCount].description);
         return 1;
       } else {
@@ -65,8 +66,7 @@ int main() {
     case 2:
       printf("\nYour tasks:\n");
       for (int i = 0; i < taskCount; i++) {
-        printf("Task %d: %sPriority: %d\n", i + 1, tasks[i].description,
-               tasks[i].priority);
+        printf("Task %d: %sPriority: %d\n", i + 1, tasks[i].description, tasks[i].priority);
       }
       break;
     case 3:
@@ -77,8 +77,7 @@ int main() {
       printf("\nEnter the task number to remove: ");
       if (scanf("%d", &taskNumber) != 1) {
         printf("\nInvalid input. Please enter a valid task number.\n");
-        while (getchar() != '\n')
-          ;
+        while (getchar() != '\n');
         break;
       }
       if (taskNumber < 1 || taskNumber > taskCount) {
@@ -105,7 +104,7 @@ int main() {
              choice);
       break;
     }
-  } while (taskCount < 1000);
+  } while (1);
 
   return 0;
 }
