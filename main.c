@@ -21,13 +21,20 @@ int main() {
     printf("Please select an option (1-4): ");
 
     int choice = 0;
-    scanf("%d", &choice);
+    if (scanf("%d", &choice) != 1) {
+      printf("\nInvalid input. Please enter a number between 1 and 4.\n");
+      while (getchar() != '\n'); // Clear the input buffer
+      continue;
+    }
     getchar();
 
     switch (choice) {
     case 1:
       printf("\nDescription of the task: ");
-      fgets(buffer, sizeof(buffer), stdin);
+      if (fgets(buffer, sizeof(buffer), stdin) == NULL) {
+        printf("\nError reading input.\n");
+        break;
+      }
       tasks[taskCount].description = malloc(strlen(buffer) + 1);
       if (tasks[taskCount].description == NULL) {
         printf("\nMemory allocation failed.\n");
@@ -36,7 +43,12 @@ int main() {
       strcpy(tasks[taskCount].description, buffer);
       printf("\nPriority of the task (1-1000): ");
       int bufferPriority;
-      scanf("%d", &bufferPriority);
+      if (scanf("%d", &bufferPriority) != 1) {
+        printf("\nInvalid input. Please enter a number between 1 and 1000.\n");
+        free(tasks[taskCount].description);
+        while (getchar() != '\n'); // Clear the input buffer
+        break;
+      }
       if (bufferPriority < 1 || bufferPriority > 1000) {
         printf(
             "\nInvalid priority. Please enter a number between 1 and 1000.\n");
@@ -61,7 +73,11 @@ int main() {
       for (int i = 0; i < taskCount; i++) {
         printf("Task %d: %s", i + 1, tasks[i].description);
       }
-      scanf("%d", &taskNumber);
+      if (scanf("%d", &taskNumber) != 1) {
+        printf("\nInvalid input. Please enter a valid task number.\n");
+        while (getchar() != '\n');
+        break;
+      }
       if (taskNumber < 1 || taskNumber > taskCount) {
         printf("\nInvalid task number.\n");
       } else {
