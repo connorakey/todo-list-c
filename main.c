@@ -42,6 +42,7 @@ int main() {
       tasks[taskCount].description = malloc(strlen(buffer) + 1);
       if (tasks[taskCount].description == NULL) {
         printf("\nMemory allocation failed.\n");
+        free(tasks[taskCount].description);
         return 1;
       }
       strcpy(tasks[taskCount].description, buffer);
