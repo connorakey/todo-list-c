@@ -5,8 +5,8 @@
 #define BUFFER_SIZE 2056
 
 typedef struct {
-   char *description;
-   int priority;
-}Task;
+    char *description;
+    int   priority;
+} Task;
 
 #endif
