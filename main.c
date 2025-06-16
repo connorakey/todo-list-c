@@ -77,7 +77,7 @@ int main() {
                         ;
                     break;
                 }
-                getchar();  // consume newline
+                getchar();
                 removeTask(index - 1);
                 break;
 
@@ -92,7 +92,7 @@ int main() {
 }
 
 void createTask(char *description, int priority) {
-    description[strcspn(description, "\n")] = 0;  // remove newline
+    description[strcspn(description, "\n")] = 0;
     tasks[taskCount].description            = malloc(strlen(description) + 1);
     if (tasks[taskCount].description == NULL) {
         printf("Memory allocation failed.\n");
