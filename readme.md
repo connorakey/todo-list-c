@@ -19,20 +19,19 @@ This To Do list does not save and fully removes all data when exitted.
 ## Editing
 If you want to edit the source code feel free to do so, the code is very simple and easy to understand.
 However, if you do not want to edit the code, I would suggest editing the values in the `config.h` file, which contains 2 values:
-MAX_TASKS
-BUFFER_SIZE
+MAX_TASKS, BUFFER_SIZE
 
 Max tasks is the maximum number of tasks you can have in your to-do list, and buffer size is the maximum length of a task (in characters).
 You can change these values to suit your needs, lowering them will increase performance, but also limit the number of tasks you can have and the length of each task.
 
 ## Requirements
 - A C compiler (GCC, Clang, etc.)
-- A terminal (Linux, Windows, Mac)
+- A terminal emulator with the ability to read input
 
 
 ## Installation
 
-Install the To Do list
+Install/Compile the To-Do list program.
 
 Linux:
 ```bash
