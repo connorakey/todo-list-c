@@ -1,19 +1,20 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct {
-  char *description;
-  int priority;
-} Task;
+#include "config.h"
+
+Task tasks[MAX_TASKS];
+char buffer[BUFFER_SIZE];
+int taskCount = 0;
+
+void createTask(char *description, int priority);
+void viewTasks();
+void removeTask(int index);
 
 int main() {
-  Task tasks[1000];
-  char buffer[1024];
-  int taskCount = 0;
-  do {
-    printf("------ Todo List Application ------\n");
+  while (1) {
+    printf("\n------ Todo List Application ------\n");
     printf("1. Add Task\n");
     printf("2. View Tasks\n");
     printf("3. Remove Task\n");
@@ -21,91 +22,99 @@ int main() {
     printf("Please select an option (1-4): ");
 
     int choice = 0;
-    if (scanf("%d", &choice) != 1) {
-      printf("\nInvalid input. Please enter a number between 1 and 4.\n");
-      while (getchar() != '\n');
+    if (scanf("%d", &choice) != 1 || choice < 1 || choice > 4) {
+      printf("Invalid choice. Please try again.\n");
+      while (getchar() != '\n'); 
       continue;
     }
-    getchar();
+    getchar(); 
 
     switch (choice) {
     case 1:
-      if (taskCount > 1000) {
-        printf("You have reached the maximum amount of accepted tasks, if you want more please edit the variable tasks within the source code");
+      if (taskCount >= MAX_TASKS) {
+        printf("Maximum number of tasks reached.\n");
         break;
       }
+
       printf("\nDescription of the task: ");
       if (fgets(buffer, sizeof(buffer), stdin) == NULL) {
-        printf("\nError reading input.\n");
+        printf("Error reading input.\n");
         break;
       }
-      tasks[taskCount].description = malloc(strlen(buffer) + 1);
-      if (tasks[taskCount].description == NULL) {
-        printf("\nMemory allocation failed.\n");
-        free(tasks[taskCount].description);
-        return 1;
-      }
-      strcpy(tasks[taskCount].description, buffer);
-      printf("\nPriority of the task (1-1000): ");
+
+      printf("Priority of the task (1-1000): ");
       int bufferPriority;
-      if (scanf("%d", &bufferPriority) != 1) {
-        printf("\nInvalid input. Please enter a number between 1 and 1000.\n");
-        free(tasks[taskCount].description);
+      if (scanf("%d", &bufferPriority) != 1 || bufferPriority < 1 || bufferPriority > 1000) {
+        printf("Invalid priority. Please enter a number between 1 and 1000.\n");
         while (getchar() != '\n');
         break;
       }
-      if (bufferPriority < 1 || bufferPriority > 1000) {
-        printf("\nInvalid priority. Please enter a number between 1 and 1000.\n");
-        free(tasks[taskCount].description);
-        return 1;
-      } else {
-        tasks[taskCount].priority = bufferPriority;
-        taskCount++;
-        printf("\nTask added successfully.\n");
-      }
+      getchar(); 
+
+      createTask(buffer, bufferPriority);
       break;
+
     case 2:
-      printf("\nYour tasks:\n");
-      for (int i = 0; i < taskCount; i++) {
-        printf("Task %d: %sPriority: %d\n", i + 1, tasks[i].description, tasks[i].priority);
-      }
+      viewTasks();
       break;
+
     case 3:
-      int taskNumber = 0;
-      for (int i = 0; i < taskCount; i++) {
-        printf("Task %d: %s", i + 1, tasks[i].description);
+      if (taskCount == 0) {
+        printf("No tasks to remove.\n");
+        break;
       }
-      printf("\nEnter the task number to remove: ");
-      if (scanf("%d", &taskNumber) != 1) {
-        printf("\nInvalid input. Please enter a valid task number.\n");
+      viewTasks();
+      printf("Enter task number to remove (1-%d): ", taskCount);
+      int index;
+      if (scanf("%d", &index) != 1 || index < 1 || index > taskCount) {
+        printf("Invalid task number.\n");
         while (getchar() != '\n');
         break;
       }
-      if (taskNumber < 1 || taskNumber > taskCount) {
-        printf("\nInvalid task number.\n");
-      } else {
-        free(tasks[taskNumber - 1].description);
-        for (int i = taskNumber - 1; i < taskCount - 1; i++) {
-          tasks[i] = tasks[i + 1];
-        }
-        taskCount--;
-        printf("\nTask removed successfully.\n");
-      }
+      getchar(); // consume newline
+      removeTask(index - 1);
       break;
 
     case 4:
-      printf("\nExiting the application.\n");
+      printf("Exiting...\n");
       for (int i = 0; i < taskCount; i++) {
         free(tasks[i].description);
       }
-      return 0;
-      break;
-      printf("\nYour choice of %d is not valid. Please select a number between "
-             "1 and 4.\n",
-             choice);
-      break;
+      exit(0);
     }
-  } while (1);
-
-  return 0;
+  }
 }
+
+void createTask(char *description, int priority) {
+  description[strcspn(description, "\n")] = 0; // remove newline
+  tasks[taskCount].description = malloc(strlen(description) + 1);
+  if (tasks[taskCount].description == NULL) {
+    printf("Memory allocation failed.\n");
+    return;
+  }
+  strcpy(tasks[taskCount].description, description);
+  tasks[taskCount].priority = priority;
+  taskCount++;
+  printf("Task added successfully!\n");
+}
+
+void viewTasks() {
+  if (taskCount == 0) {
+    printf("No tasks available.\n");
+    return;
+  }
+
+  for (int i = 0; i < taskCount; i++) {
+    printf("%d. %s (Priority: %d)\n", i + 1, tasks[i].description, tasks[i].priority);
+  }
+}
+
+void removeTask(int index) {
+  free(tasks[index].description);
+  for (int i = index; i < taskCount - 1; i++) {
+    tasks[i] = tasks[i + 1];
+  }
+  taskCount--;
+  printf("Task removed successfully.\n");
+}
+
