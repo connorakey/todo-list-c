@@ -2,11 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "config.h"
+#include "config.h"  // task structure and buffer size definitions
 
-Task tasks[MAX_TASKS];
-char buffer[BUFFER_SIZE];
-int  taskCount = 0;
+Task tasks[MAX_TASKS];     // Pulled in by config.h file
+char buffer[BUFFER_SIZE];  // Pulled in by config.h file
+
+int taskCount = 0;
 
 void createTask(char *description, int priority);
 
